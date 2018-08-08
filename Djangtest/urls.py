@@ -17,19 +17,18 @@ from django.contrib import admin
 from django.urls import path,include,re_path
 from django.views.generic import TemplateView
 import xadmin
-from users.views import LoginView,RegisterView,ActiveUserView,ForgetPwdView,ResetPwdView,ModifyPwdView
+from users.views import LoginView,RegisterView,ActiveUserView,ForgetPwdView,ResetPwdView,ModifyPwdView,LogoutView,IndexView
 from django.contrib.auth.views import logout
 from django.views.static import serve
 from .settings import MEDIA_ROOT
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
-    path('',TemplateView.as_view(template_name='index.html'),name='index'),
-    path('index',TemplateView.as_view(template_name='index.html'),name='index2'),
+    path('',IndexView.as_view(),name='index'),
     path('login/',LoginView.as_view(),name='login'),
     path('register/',RegisterView.as_view(),name='register'),
     path('captcha/',include('captcha.urls')),
-    path('loguot/',logout,{'next_page':'/index'},name='logout'),
+    path('loguot/',LogoutView.as_view(),name='logout'),
     re_path(r'^media/(?P<path>.*)',serve,{"document_root": MEDIA_ROOT }),
 
     re_path('active/(?P<active_code>.*)/',ActiveUserView.as_view(),name='user_active'),

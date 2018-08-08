@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.db import models
 from django.utils import timezone
 from users.models import UserProfile
@@ -13,7 +11,7 @@ class UserAsk(models.Model):
     name = models.CharField(max_length=20, verbose_name=u"姓名")
     mobile = models.CharField(max_length=11, verbose_name=u"手机")
     course_name = models.CharField(max_length=50, verbose_name=u"课程名")
-    add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
+    add_time = models.DateTimeField(default=timezone.now, verbose_name=u"添加时间")
 
     class Meta:
         verbose_name = u"用户咨询"
@@ -28,13 +26,11 @@ class CourseComments(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE,verbose_name=u"课程")
     user = models.ForeignKey(UserProfile,on_delete=models.CASCADE, verbose_name=u"用户")
     comments = models.CharField(max_length=250, verbose_name=u"评论")
-    add_time = models.DateTimeField(default=datetime.now, verbose_name=u"评论时间")
+    add_time = models.DateTimeField(default=timezone.now, verbose_name=u"评论时间")
 
     class Meta:
         verbose_name = u"课程评论"
         verbose_name_plural = verbose_name
-
-
 
 
 # 用户的收藏
@@ -57,26 +53,23 @@ class UserFavorite(models.Model):
         verbose_name_plural = verbose_name
 
 
-
 # 用户消息
 class UserMessage(models.Model):
     user = models.IntegerField(default=0, verbose_name=u"接收用户")
     message = models.CharField(max_length=500, verbose_name=u"消息内容")
     # 是否已读: False未读,True表示已读
     has_read = models.BooleanField(default=False, verbose_name=u"是否已读")
-    add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
+    add_time = models.DateTimeField(default=timezone.now, verbose_name=u"添加时间")
 
     class Meta:
         verbose_name = u"用户消息"
         verbose_name_plural = verbose_name
 
-
-
 # 用户课程表
 class UserCourse(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE,verbose_name=u"课程")
     user = models.ForeignKey(UserProfile,on_delete=models.CASCADE, verbose_name=u"用户")
-    add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
+    add_time = models.DateTimeField(default=timezone.now, verbose_name=u"添加时间")
 
     class Meta:
         verbose_name = u"用户课程"

@@ -67,6 +67,8 @@ class OrgHomeView(View):
         all_courses = course_org.course_set.all()[:3]
         all_teacher = course_org.teacher_set.all()[:2]
         has_fav = False
+        course_org.click_nums += 1
+        course_org.save()
         if request.user.is_authenticated:
             if UserFavorite.objects.filter(user=request.user, fav_id=course_org.id, fav_type=2):
                 has_fav = True
@@ -226,6 +228,8 @@ class TeacherDetailView(View):
         rank_teachers = Teacher.objects.filter(org=teacher.org).order_by('-fav_nums')[:3]
         has_fav_th = False
         has_fav_org = False
+        teacher.click_nums +=1
+        teacher.save()
         if request.user.is_authenticated:
             if UserFavorite.objects.filter(user=request.user, fav_id=teacher.id, fav_type=3):
                 has_fav_th = True

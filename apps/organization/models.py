@@ -1,13 +1,12 @@
-from datetime import datetime
-
 from django.db import models
+from django.utils import timezone
 # Create your models here.
 
 # 城市
 class CityDict(models.Model):
     name = models.CharField(max_length=50, verbose_name=u'城市')
     desc = models.CharField(max_length=200, verbose_name=u'描述')
-    add_time = models.DateField(default=datetime.now, verbose_name=u'添加时间')
+    add_time = models.DateField(default=timezone.now, verbose_name=u'添加时间')
 
     class Meta:
         verbose_name = u'城市'
@@ -27,12 +26,13 @@ class CourseOrg(models.Model):
     name = models.CharField(max_length=50, verbose_name=u'机构名称')
     address = models.CharField(max_length=150, verbose_name=u'机构地址')
     desc = models.CharField(max_length=200, verbose_name=u'机构描述')
+    tag = models.CharField(default=u"全国知名",max_length=10, verbose_name=u'机构标签')
     fav_nums = models.IntegerField(default=0, verbose_name=u'收藏人数')
     click_nums = models.IntegerField(default=0, verbose_name=u'点击数')
     students = models.IntegerField(default=0, verbose_name=u'学习人数')
     course_nums = models.IntegerField(default=0, verbose_name=u'课程数')
     city = models.ForeignKey(CityDict, on_delete=models.CASCADE, verbose_name=u'所在城市')
-    add_time = models.DateField(default=datetime.now, verbose_name=u'添加时间')
+    add_time = models.DateField(default=timezone.now, verbose_name=u'添加时间')
     image = models.ImageField(
         upload_to='org/%Y/%m',
         verbose_name=u'封面图',
@@ -51,9 +51,15 @@ class CourseOrg(models.Model):
 
     def __str__(self):
         return self.name
+
     # 取机构讲师数
     def get_teacher_nums(self):
         return self.teacher_set.all().count()
+
+    # 获取机构热门课程作经典课程推荐
+    def get_hot_course(self):
+        return self.course_set.all().order_by("-students")[:2]
+
 
 
 # 讲师
@@ -67,7 +73,7 @@ class Teacher(models.Model):
     points = models.CharField(max_length=50, verbose_name=u"教学特点")
     click_nums = models.IntegerField(default=0, verbose_name=u"点击数")
     fav_nums = models.IntegerField(default=0, verbose_name=u"收藏数")
-    add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
+    add_time = models.DateTimeField(default=timezone.now, verbose_name=u"添加时间")
     image = models.ImageField(
         upload_to='teacher/%Y/%m',
         verbose_name=u'头像',

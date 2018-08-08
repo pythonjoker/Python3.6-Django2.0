@@ -139,14 +139,14 @@
                         <div class="head">讲师排行榜</div>
                         {% for rank_teacher in rank_teachers %}
                             <dl class="des">
-                            <span class="num fl">1</span>
-                            <a href="">
+                            <span class="num fl">{{forloop.counter}} </span>
+                            <a href="{% url 'org:teacher_datail' rank_teacher.id %}">
                                 <dt>
                                     <img width="50" height="50" class="scrollLoading" src="{{ MEDIA_URL }}{{ rank_teacher.image }}"/>
                                 </dt>
                             </a>
                             <dd>
-                                <a href="/org/teacher/detail/1/">
+                                <a href="{% url 'org:teacher_datail' rank_teacher.id %}">
                                     <h1 title="bobby">{{ rank_teacher.name }}</h1>
                                 </a>
                                 <p>工作年限：<span>{{ rank_teacher.work_years }}年</span></p>

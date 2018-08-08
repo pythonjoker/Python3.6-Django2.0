@@ -2,10 +2,10 @@ import json
 from django.db.models import Q
 from django.shortcuts import render
 from pure_pagination import Paginator,PageNotAnInteger
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate,login,logout
 from django.views.generic.base import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import UserProfile,EmailVerifyRecord
+from .models import UserProfile,EmailVerifyRecord,Banner
 from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
 from .forms import LoginForm,RegisterForm,ForgetPwdForm,ModifyPwdForm,UploadImageForm,UpdateUserInfoForm
@@ -51,6 +51,13 @@ class LoginView(View):
                 return render(request,'login.html',{'msg':'账号或密码错误'})
         else:
             return render(request, 'login.html', {'login_form': login_form})
+
+
+# 登出
+class LogoutView(View):
+    def get(self,request):
+        logout(request)
+        return render(request,'index.html',{})
 
 
 # 注册
@@ -289,6 +296,10 @@ class MyFavTeacherView(LoginRequiredMixin,View):
 class MyMessageView(LoginRequiredMixin,View):
     def get(self,request):
         all_message = UserMessage.objects.filter(Q(user=request.user.id)|Q(user=0))
+        all_unread_message = UserMessage.objects.filter(user=request.user.id,has_read=False)
+        for unread_message in all_unread_message:
+            unread_message.has_read = True
+            unread_message.save()
         try:
             page = request.GET.get('page',1)
         except PageNotAnInteger:
@@ -298,4 +309,19 @@ class MyMessageView(LoginRequiredMixin,View):
         message = p.page(page)
         return render(request,'usercenter-message.html',{
             'all_message':message,
+        })
+
+
+# 首页
+class IndexView(View):
+    def get(self,request):
+        all_banners = Banner.objects.all().order_by('index')[:5]
+        course_banners = Course.objects.filter(is_banner=True)[:3]
+        courses = Course.objects.filter(is_banner=False)[:6]
+        course_org = CourseOrg.objects.all()[:15]
+        return render(request,'index.html',{
+            'all_banners':all_banners,
+            'course_banners':course_banners,
+            'courses':courses,
+            'course_org':course_org,
         })

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from datetime import datetime,timedelta
+from django.utils import timezone
 # Create your models here.
 
 
@@ -41,6 +41,9 @@ class UserProfile(AbstractUser):
     def __str__(self):
         return self.username
 
+    def unread_nums(self):
+        from operation.models import UserMessage
+        return UserMessage.objects.filter(user=self.id,has_read=False).count()
 
 # 邮箱验证码
 class EmailVerifyRecord(models.Model):
@@ -55,8 +58,8 @@ class EmailVerifyRecord(models.Model):
     send_type = models.CharField(choices=SEND_CHOICES,max_length=10)
 
     # now后的（）需要去掉 否者会根据编译时间，而不是实例化时间
-    send_time = models.DateTimeField(default=datetime.now,verbose_name = u'发送时间')
-    ex_time = models.DateTimeField(default=datetime.now,verbose_name = u'失效时间')
+    send_time = models.DateTimeField(default=timezone.now,verbose_name = u'发送时间')
+    ex_time = models.DateTimeField(default=timezone.now,verbose_name = u'失效时间')
     has_use = models.BooleanField(default=False,verbose_name=u'是否使用')
     class Meta:
         verbose_name = u'邮箱验证码'
@@ -77,7 +80,7 @@ class Banner(models.Model):
     url = models.URLField(max_length=200,verbose_name=u'访问地址')
     # index越大越靠后
     index = models.IntegerField(default=100,verbose_name=u'顺序')
-    add_time = models.DateField(default=datetime.now,verbose_name=u'添加时间')
+    add_time = models.DateField(default=timezone.now,verbose_name=u'添加时间')
 
     class Meta:
         verbose_name = u'轮播图'

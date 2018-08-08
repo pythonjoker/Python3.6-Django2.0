@@ -77,11 +77,9 @@
                             <li class="first"><p class="pic9">课程数：<span>{{org.course_nums}}</span></p><p class="c7">学习人数：<span>{{ org.students }}</span></p></li>
                             <li class="c8" style="padding-left:18px;">{{ org.address }}</li>
                             <li class="pic10" style="padding-left:18px;">经典课程：
-
-                                    <a href="/diary/19/">c语言基础入门</a>
-
-                                    <a href="/diary/16/">数据库基础</a>
-
+                                {% for course in org.get_hot_course %}
+                                    <a href="{% url 'cor:cor_detail' course.id %}">{{ course.name }}</a>
+                                {% endfor %}
                             </li>
                         </ul>
                     </dd>
@@ -138,9 +136,9 @@
 			<div class="head">授课机构排名</div>
             {% for hot_org in hot_orgs %}
                 <dl class="des">
-                    <dt class="num fl">1</dt>
+                    <dt class="num fl">{{forloop.counter}}</dt>
                     <dd>
-                        <a href="/company/2/"><h1>{{ hot_org.name }}</h1></a>
+                        <a href="{% url 'org:org_home' hot_org.id %}"><h1>{{ hot_org.name }}</h1></a>
                         <p>{{ hot_org.address }}</p>
                     </dd>
                 </dl>

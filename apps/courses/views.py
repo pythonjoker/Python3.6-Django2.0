@@ -83,6 +83,8 @@ class CourseInfoView(View):
             user_cor.user = user
             user_cor.course = course
             user_cor.save()
+            course.students += 1
+            course.save()
 
         all_info = Lesson.objects.filter(course_id=int(course_id))
         all_resource = CourseResource.objects.filter(course_id=int(course_id))
