@@ -1,0 +1,69 @@
+{% extends 'usercenter-base.html' %}
+{% load staticfiles%}
+{% block title %}
+    个人信息
+{% endblock %}
+{% block custom_bread %}
+    <section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="{% url 'index' %}">首页</a>></li>
+                <li><a href="">个人中心</a>></li>
+                <li>我的课程</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+{% block right-content %}
+
+<div class="right" >
+		<div class="personal_des Releasecont">
+			<div class="head">
+				<h1>我的课程</h1>
+			</div>
+		</div>
+		<div class="personal_des permessage">
+			<div class="companycenter">
+				<div class="group_list brief">
+                    {% for user_course in user_courses %}
+                    <div class="module1_5 box">
+                            <a href="{% url 'cor:cor_detail' user_course.course.id%}">
+                                <img width="214" height="190" class="scrollLoading" src="{{ MEDIA_URL }}{{ user_course.course.image }}"/>
+                            </a>
+                            <div class="des">
+                                <a href="{% url 'cor:cor_detail' user_course.course.id %}"><h2>{{ user_course.course.name }}</h2></a>
+                                <span class="fl">课时：<i class="key"></i></span>
+                                <span class="fr">学习人数：13</span>
+                            </div>
+                            <div class="bottom">
+                                <span class="fl">北京大学</span>
+                                <span class="star fr  jsDeleteFav_course" data-favid="{{ user_course.course.id }}">{{ user_course.course.fav_nums }}</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+				</div>
+			</div>
+
+		</div>
+	</div>
+    <script type="text/javascript">
+        $('.jsDeleteFav_course').on('click', function(){
+                var _this = $(this),
+                    favid = _this.attr('data-favid');
+                $.ajax({
+                        cache: false,
+                        type: "POST",
+                        url: "{% url 'org:add_fav' %}",
+                        data: {
+                            fav_type: 1,
+                            fav_id: favid,
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                        },
+                        async: true,
+                        success: function(data) {
+                            Dml.fun.winReload();
+                        }
+                    });
+            });
+    </script>
+{% endblock %}
