@@ -25,7 +25,7 @@ SECRET_KEY = 'k1+vt91g)9qyy(8om_mz5-8p)x+wg+zva+w!m#ua$c4+rgb2^b'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 AUTHENTICATION_BACKENDS =(
     'users.views.CustomBackend',
@@ -137,6 +137,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
@@ -145,6 +146,7 @@ LOGIN_URL = '/login/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 EMAIL_USE_TLS = True
 EMAIL_HOST='smtp.qq.com'

@@ -12,7 +12,8 @@ from .forms import LoginForm,RegisterForm,ForgetPwdForm,ModifyPwdForm,UploadImag
 from django.contrib.auth.hashers import make_password
 from utils.email_send import send_register_email
 from django.utils import timezone
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
+from django.urls import reverse
 from operation.models import UserCourse,UserFavorite,UserMessage
 from courses.models import CourseOrg,Course
 from organization.models import Teacher
@@ -44,7 +45,7 @@ class LoginView(View):
             if user is not None:
                 if user.is_active:
                     login(request,user)
-                    return render(request,'index.html',{'user':user})
+                    return HttpResponseRedirect(reverse("index"))
                 else:
                     return render(request, 'login.html', {'msg':'用户未激活'})
             else:
@@ -57,8 +58,7 @@ class LoginView(View):
 class LogoutView(View):
     def get(self,request):
         logout(request)
-        return render(request,'index.html',{})
-
+        return HttpResponseRedirect(reverse("index"))
 
 # 注册
 class RegisterView(View):
@@ -325,3 +325,17 @@ class IndexView(View):
             'courses':courses,
             'course_org':course_org,
         })
+
+
+# 404
+def page_not_found(request):
+    from django.shortcuts import render_to_response
+    response = render_to_response('404.html',{})
+    response.status_code = 404
+    return response
+
+def page_error(request):
+    from django.shortcuts import render_to_response
+    response = render_to_response('500.html',{})
+    response.status_code = 500
+    return response
