@@ -245,8 +245,17 @@ class UpdateEmailView(LoginRequiredMixin,View):
 class MyCourseView(LoginRequiredMixin,View):
     def get(self,request):
         user_courses = UserCourse.objects.filter(user=request.user)
+
+        try:
+            page = request.GET.get('page',1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(user_courses,4,request=request)
+        message = p.page(page)
+
         return render(request,'usercenter-mycourse.html',{
-            'user_courses':user_courses,
+            'user_courses':message,
         })
 
 
@@ -259,8 +268,17 @@ class MyFavOrgView(LoginRequiredMixin,View):
             org_id = fav_org.fav_id
             org = CourseOrg.objects.get(id=org_id)
             org_list.append(org)
+
+        try:
+            page = request.GET.get('page',1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(org_list,4,request=request)
+        message = p.page(page)
+
         return render(request,'usercenter-fav-org.html',{
-            'all_fav_org':org_list,
+            'all_fav_org':message,
         })
 
 
@@ -273,8 +291,17 @@ class MyFavCourseView(LoginRequiredMixin,View):
             course_id = fav_course.fav_id
             course = Course.objects.get(id=course_id)
             course_list.append(course)
+
+        try:
+            page = request.GET.get('page',1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(course_list,5,request=request)
+        message = p.page(page)
+
         return render(request,'usercenter-fav-course.html',{
-            'all_fav_course':course_list,
+            'all_fav_course':message,
         })
 
 
@@ -287,8 +314,17 @@ class MyFavTeacherView(LoginRequiredMixin,View):
             teacher_id = fav_teacher.fav_id
             teacher = Teacher.objects.get(id=teacher_id)
             teacher_list.append(teacher)
+
+        try:
+            page = request.GET.get('page',1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(teacher_list,4,request=request)
+        message = p.page(page)
+
         return render(request,'usercenter-fav-teacher.html',{
-            'all_fav_teacher':teacher_list,
+            'all_fav_teacher':message,
         })
 
 

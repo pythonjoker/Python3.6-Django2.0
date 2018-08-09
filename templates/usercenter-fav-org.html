@@ -31,7 +31,7 @@
                     </ul>
                 </div>
                 <div class="messagelist">
-                    {% for org in all_fav_org %}
+                    {% for org in all_fav_org.object_list %}
                     <div class="messages butler_list company company-fav-box">
                         <dl class="des fr">
                             <dt>
@@ -56,6 +56,30 @@
                     </div>
                     {% endfor %}
                 </div>
+            <div class="pageturn pagerright">
+                <ul class="pagelist">
+                    <ul class="pagelist">
+                {% if all_fav_org.has_previous %}
+                    <li class="long"><a href="?{{ all_fav_org.previous_page_number.querystring }}">上一页</a></li>
+                {% endif %}
+                {% for page in all_fav_org.pages %}
+                    {% if page%}
+                        {% ifequal page all_fav_org.number %}
+                            <li class="active"><a href="?{{ page.querystring  }}">{{ page }}</a></li>
+                        {% else %}
+                            <li><a href="?{{ page.querystring  }}">{{ page }}</a></li>
+                        {% endifequal %}
+                    {% else %}
+                        <li class="none"><a href="">...</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if all_fav_org.has_next %}
+                <li class="long"><a href="?{{ all_fav_org.next_page_number.querystring }}">下一页</a></li>
+                {% endif %}
+
+            </ul>
+            </ul>
+            </div>
             </div>
         </div>
     <script type="text/javascript">
