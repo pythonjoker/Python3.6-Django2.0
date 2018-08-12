@@ -44,9 +44,18 @@ class Course(models.Model):
     def get_zj_nums(self):
         return self.lesson_set.all().count()
 
+    get_zj_nums.short_description = '章节数'
+
     # 取学习人数前五
     def get_students(self):
         return self.usercourse_set.all()[:5]
+
+
+class BannerCourse(Course):
+    class Meta:
+        verbose_name = u'轮播课程'
+        verbose_name_plural = verbose_name
+        proxy = True
 
 
 # 章节表

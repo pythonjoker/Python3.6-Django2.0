@@ -39,6 +39,7 @@ class GlobalSetting(object):
         return (
             {'title': '课程管理', 'menus': (
                 {'title': '课程信息', 'url': self.get_model_url(Course, 'changelist')},
+                {'title': '轮播课程', 'url': self.get_model_url(BannerCourse, 'changelist')},
                 {'title': '章节信息', 'url': self.get_model_url(Lesson, 'changelist')},
                 {'title': '视频信息', 'url': self.get_model_url(Video, 'changelist')},
                 {'title': '课程资源', 'url': self.get_model_url(CourseResource, 'changelist')},
