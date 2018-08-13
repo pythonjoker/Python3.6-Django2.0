@@ -25,6 +25,7 @@ class CourseAdmin(object):
     exclude = ['fav_nums']
     inlines = [LessonInline,CourseResourceInline]
     list_editable = ['degree', 'desc', ]
+    style_fields = {'detail':'ueditor'}
 
     def queryset(self):
         qs = super(CourseAdmin,self).queryset()

@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from organization.models import CourseOrg,Teacher
+from DjangoUeditor.models import UEditorField
 # Create your models here.
 
 
@@ -14,7 +15,8 @@ class Course(models.Model):
     name = models.CharField(max_length=50,verbose_name=u'课程名')
     teacher=models.ForeignKey(Teacher,on_delete=models.CASCADE,null=True, blank=True,verbose_name=u'讲师')
     desc = models.CharField(max_length=200,verbose_name=u'课程描述')
-    detail = models.TextField(verbose_name=u'课程详情')
+    detail = UEditorField(width=600, height=300, imagePath="course/ueditor/image/",
+                           filePath="course/ueditor/file/",verbose_name=u'课程详情',default='')
     tag = models.CharField(max_length=15,verbose_name=u'课程标签',default=u'')
     Notice = models.CharField(max_length=50,verbose_name=u'课程公告',default=u'欢迎学习本课程')
     teacher_tell = models.CharField(max_length=100,verbose_name=u'老师告诉你',default=u'你什么都能学到')

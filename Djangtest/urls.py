@@ -13,18 +13,17 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path,include,re_path
-from django.views.generic import TemplateView
+import DjangoUeditor
 import xadmin
+from django.urls import path,include,re_path
 from users.views import LoginView,RegisterView,ActiveUserView,ForgetPwdView,ResetPwdView,ModifyPwdView,LogoutView,IndexView
-from django.contrib.auth.views import logout
 from django.views.static import serve
 
 from .settings import MEDIA_ROOT
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
+    re_path(r'^ueditor/',include('DjangoUeditor.urls')),
     path('',IndexView.as_view(),name='index'),
     path('login/',LoginView.as_view(),name='login'),
     path('register/',RegisterView.as_view(),name='register'),
@@ -42,5 +41,6 @@ urlpatterns = [
     path('org/',include('organization.urls',namespace='org')),
     path('user/',include('users.urls',namespace='user')),
 ]
-handler404 = 'users.views.page_not_found'
-handler500 = 'users.views.page_error'
+# Django2.0中 在templates下创建404.html后 Django会自动寻找
+# handler404 = 'users.views.page_not_found'
+# handler500 = 'users.views.page_error'
